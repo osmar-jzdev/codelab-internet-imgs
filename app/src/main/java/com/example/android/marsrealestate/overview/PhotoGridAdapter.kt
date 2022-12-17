@@ -25,15 +25,20 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.marsrealestate.databinding.GridViewItemBinding
 
-class PhotoGridAdapter : ListAdapter<MarsProperty,
-        PhotoGridAdapter.MarsPropertyViewHolder>(DiffCallback) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoGridAdapter.MarsPropertyViewHolder {
-        return MarsPropertyViewHolder(GridViewItemBinding.inflate(
-            LayoutInflater.from(parent.context)))
+class PhotoGridAdapter( private val onClickListener: OnClickListener ) :
+    ListAdapter<MarsProperty,
+            PhotoGridAdapter.MarsPropertyViewHolder>(DiffCallback) {
+
+    override fun onCreateViewHolder(parent: ViewGroup,
+                                    viewType: Int): MarsPropertyViewHolder {
+        return MarsPropertyViewHolder(GridViewItemBinding.inflate(LayoutInflater.from(parent.context)))
     }
 
-    override fun onBindViewHolder(holder: PhotoGridAdapter.MarsPropertyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MarsPropertyViewHolder, position: Int) {
         val marsProperty = getItem(position)
+        holder.itemView.setOnClickListener {
+            onClickListener.onClick(marsProperty)
+        }
         holder.bind(marsProperty)
     }
 
@@ -47,15 +52,18 @@ class PhotoGridAdapter : ListAdapter<MarsProperty,
         }
     }
 
-    class MarsPropertyViewHolder(private var binding:
-                                 GridViewItemBinding):
+    class MarsPropertyViewHolder(private var binding: GridViewItemBinding):
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(marsProperty: MarsProperty) {
             binding.property = marsProperty
+            // This is important, because it forces the data binding to execute immediately,
+            // which allows the RecyclerView to make the correct view size measurements
             binding.executePendingBindings()
         }
+    }
 
+    class OnClickListener(val clickListener: (marsProperty:MarsProperty) -> Unit) {
+        fun onClick(marsProperty:MarsProperty) = clickListener(marsProperty)
     }
 }
 

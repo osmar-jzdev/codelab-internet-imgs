@@ -32,8 +32,7 @@ import com.example.android.marsrealestate.overview.MarsApiStatus
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
     imgUrl?.let {
-        val imgUri =
-            imgUrl.toUri().buildUpon().scheme("https").build()
+        val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
         Glide.with(imgView.context)
             .load(imgUri)
             .apply(RequestOptions()
@@ -43,16 +42,15 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
     }
 }
 
+
 @BindingAdapter("listData")
-fun bindRecyclerView(recyclerView: RecyclerView,
-                     data: List<MarsProperty>?) {
+fun bindRecyclerView(recyclerView: RecyclerView, data: List<MarsProperty>?) {
     val adapter = recyclerView.adapter as PhotoGridAdapter
     adapter.submitList(data)
 }
 
 @BindingAdapter("marsApiStatus")
-fun bindStatus(statusImageView: ImageView,
-               status: MarsApiStatus?) {
+fun bindStatus(statusImageView: ImageView, status: MarsApiStatus?) {
     when (status) {
         MarsApiStatus.LOADING -> {
             statusImageView.visibility = View.VISIBLE
